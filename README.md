@@ -17,8 +17,8 @@ usage: meangs.py [-h] [-1 FQ1] [-2 FQ2] [-o OUTBASE] [-t THREADS]
 optional arguments:  
 　-h	--help            show this help message and exit  
 　-1　　FQ1, --fq1 FQ1     Input paired end _1.fq[.gz] files,seprated by ','  
-　-2　　FQ2, --fq2 FQ2     Input paired end _2.fq[.gz] files,seprated by ','  	
-　-o　　OUTBASE, --outBase OUTBASE Output prefix of dir and files　　
+　-2　　FQ2, --fq2 FQ2     Input paired end _2.fq[.gz] files,seprated by ','  
+　-o　　OUTBASE, --outBase OUTBASE Output prefix of dir and files  
 　-t　　THREADS, --threads THREADS Analysis threads  
 　-i　　INSERT, --insert INSERT library insert length  
 　-q　　QUALITY, --quality QUALITY Threshold value for low base quality  
