@@ -8,11 +8,11 @@ The *`MEANGS`* is a seed-free software that applies trie-search to extend contig
 # Usage  
 MitoDNA extending assembler from `NGS` data  
 usage: meangs.py [-h] [-1 FQ1] [-2 FQ2] [-o OUTBASE] [-t THREADS]  
-		      [-i INSERT] [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]  
-                      [--species_class {A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}]  
-                      [--deepin] [--keepIntMed] [--keepMinLen KEEPMINLEN]  
-                      [--skipassem] [--skipqc] [--skiphmm] [--skipextend]  
-                      [--silence]  
+　　　　　　　　　　　　[-i INSERT] [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]  
+　　　　　　　　　　　　[--species_class {A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}]  
+　　　　　　　　　　　　[--deepin] [--keepIntMed] [--keepMinLen KEEPMINLEN]  
+　　　　　　　　　　　　[--skipassem] [--skipqc] [--skiphmm] [--skipextend]  
+　　　　　　　　　　　　[--silence]  
 
 Example: python meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350  
 
@@ -50,6 +50,6 @@ optional arguments:
 # note  
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
 ***
-# example  
-meangs.py -1 f_1.fq.gz -2 f_2.fq.gz -o outprefix -t 16 -n 10000 -i 300 --deepin --keepIntMed  
+# example
+	meangs.py -1 f_1.fq.gz -2 f_2.fq.gz -o outprefix -t 16 -n 10000 -i 300 --deepin --keepIntMed  
 
