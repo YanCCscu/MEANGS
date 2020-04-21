@@ -23,18 +23,17 @@ optional arguments:
 　  -i　　INSERT, --insert INSERT library insert length  
 　  -q　　QUALITY, --quality QUALITY Threshold value for low base quality  
 　  -n　　NSAMPLE, --nsample NSAMPLE Number of reads sampled from input reads, default 0 (keep all reads)  
-  　-s　　SEQSCAF, --seqscaf SEQSCAF specific a sequences files(fasta) just for annotation  
-  　--species_class　　{A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}  
+　　-s　　SEQSCAF, --seqscaf SEQSCAF specific a sequences files(fasta) just for annotation  
+　　--species_class　　{A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}  
   　                      taxon of species belong to  
-  　--deepin              run deeper mode to assembly mitogenome  
-  　--keepIntMed          keep the intermediate files  
-  　--keepMinLen KEEPMINLEN  
-  　                      Threshold of reads length to keep after remove low quality bases  
-  　--skipassem           skip the process of assembly  
-  　--skipqc              skip the process of QC  
-　  --skiphmm             skip the process of hmmer  
-　  --skipextend          skip the process of extend in deepin mode  
-　  --silence             run the program in silence mode, the standard output will redirect to specific log file 
+　　--deepin　run deeper mode to assembly mitogenome  
+　　--keepIntMed　keep the intermediate files  
+　　--keepMinLen　KEEPMINLEN　Threshold of reads length to keep after remove low quality bases  
+  　--skipassem　skip the process of assembly  
+  　--skipqc　skip the process of QC  
+　  --skiphmm　skip the process of hmmer  
+　  --skipextend　skip the process of extend in deepin mode  
+　  --silence　run the program in silence mode, the standard output will redirect to specific log file 
 
 ***
 # note  
