@@ -1,0 +1,46 @@
+#!/usr/bin/env  python
+#get specific sequences by title
+#USAGE:python sys.argv[0] title.info.file sequences.file
+import sys,re
+#from string import maketrans
+#base_compl_tab = maketrans("ATGC","TACG")
+def parse_fas(fasfile): #parse fasta and return a dict
+        inhandle=open(fasfile)
+        while True:                #skip empty lines and get the first title line
+                lin=inhandle.readline()
+                if not lin:
+                        break
+                if lin=="":
+                        continue
+                if lin[0]==">":
+                        break
+        while True:             #compose the dict storing title and sequence
+                if not lin:
+                        break
+                title=lin[1:].strip().split()[0]
+                lin=inhandle.readline()
+                sequence=""
+                while True:
+                        if not lin:
+                                break
+                        if lin[0]==">":
+                                break
+                        sequence=sequence+lin.strip().replace(" ","").replace("\r","")
+                        lin=inhandle.readline()
+                        #sys.stderr.write('Finished parsing %s\n'%fasfile)
+                yield title,sequence
+
+selected_titles=[]
+cds=[]
+with open(sys.argv[1],'r') as gffinfo:
+	for gff in gffinfo:
+		gffl=gff.strip().split()
+		selected_titles.append(gffl[0])
+		cds.append("..".join(gffl[1:4]))
+
+selected_titles=set(selected_titles)
+cds="_".join(cds)
+for title,seq  in parse_fas(sys.argv[2]):
+	if title in selected_titles:
+		print (">%s\t%s\n%s"%(title,cds,seq))
+#		seq.upper()[::-1]).translate(base_compl_tab))
