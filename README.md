@@ -2,6 +2,10 @@
 ***
 # MitoDNA-extending-assembler-from-NGS-data
 ***
+#Function
+
+***
+#Usage
 MitoDNA extending assembler from `NGS` data  
 usage: meangs.py [-h] [-1 FQ1] [-2 FQ2] [-o OUTBASE] [-t THREADS]  
 											[-i INSERT] [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]  
@@ -25,7 +29,7 @@ optional arguments:
   -q QUALITY, --quality QUALITY  
                         Threshold value for low base quality  
   -n NSAMPLE, --nsample NSAMPLE  
-                        Number of reads sampled from input reads before QC,  
+                        Number of reads sampled from input reads,  
                         default 0 (keep all reads)  
   -s SEQSCAF, --seqscaf SEQSCAF  
                         specific a sequences files(fasta) just for annotation  
@@ -41,3 +45,7 @@ optional arguments:
   --skiphmm             skip the process of hmmer  
   --skipextend          skip the process of extend in deepin mode  
   --silence             run the program in silence mode, the standard output will redirect to specific log file  
+***
+#note
+`The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage`
+

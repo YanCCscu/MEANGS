@@ -15,7 +15,7 @@ parser.add_argument("-o", "--outBase", help="Output prefix of dir and files", ac
 parser.add_argument("-t", "--threads", help="Analysis threads", type=int, action = "store", default = 1)
 parser.add_argument("-i", "--insert", help="library insert length", type=int, action = "store", default = 350)
 parser.add_argument("-q","--quality", help="Threshold value for low base quality", type=float, action = "store", default = 0.05)
-parser.add_argument("-n","--nsample", help="Number of reads sampled from input reads before QC, default 0 (keep all reads)", type=int, action = "store", default = 0)
+parser.add_argument("-n","--nsample", help="Number of reads sampled from input reads, default 0 (keep all reads)", type=int, action = "store", default = 0)
 parser.add_argument("-s","--seqscaf", help="specific a sequences files(fasta) just for annotation", type=str, action = "store")
 parser.add_argument("--species_class", help="taxon of species belong to", action = "store", \
 	choices = ("A-worms","Arthropoda","Bryozoa","Chordata","Echinodermata",\
