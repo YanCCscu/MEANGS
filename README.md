@@ -3,12 +3,12 @@
 # MEANGS: MitoDNA extending assembler from NGS data
 ***
 # Function  
-The `MEANGS` is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
+The *`MEANGS`* is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 ***
 # Usage  
 MitoDNA extending assembler from `NGS` data  
 usage: meangs.py [-h] [-1 FQ1] [-2 FQ2] [-o OUTBASE] [-t THREADS]  
-											[-i INSERT] [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]  
+		      [-i INSERT] [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]  
                       [--species_class {A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}]  
                       [--deepin] [--keepIntMed] [--keepMinLen KEEPMINLEN]  
                       [--skipassem] [--skipqc] [--skiphmm] [--skipextend]  
@@ -44,8 +44,12 @@ optional arguments:
   --skipqc              skip the process of QC  
   --skiphmm             skip the process of hmmer  
   --skipextend          skip the process of extend in deepin mode  
-  --silence             run the program in silence mode, the standard output will redirect to specific log file  
+  --silence             run the program in silence mode, the standard output will redirect to specific log file 
+  ```
 ***
 # note  
-`The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage`
+The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
+***
+# example  
+meangs.py -1 f_1.fq.gz -2 f_2.fq.gz -o outprefix -t 16 -n 10000 -i 300 --deepin --keepIntMed  
 
