@@ -1,9 +1,9 @@
 
 ***
-# MitoDNA-extending-assembler-from-NGS-data
+# MEANGS: MitoDNA extending assembler from NGS data
 ***
 #Function
-
+The `MEANGS` is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 ***
 #Usage
 MitoDNA extending assembler from `NGS` data  
