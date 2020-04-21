@@ -36,9 +36,9 @@ optional arguments:
 　--silence　run the program in silence mode, the standard output will redirect to specific log file 
 
 ***
-# note  
+# Note  
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
 ***
-# example
+# Example
 	meangs.py -1 f_1.fq.gz -2 f_2.fq.gz -o outprefix -t 16 -n 10000 -i 300 --deepin --keepIntMed  
 
