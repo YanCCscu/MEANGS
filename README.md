@@ -45,7 +45,7 @@ optional arguments:
   --skiphmm             skip the process of hmmer  
   --skipextend          skip the process of extend in deepin mode  
   --silence             run the program in silence mode, the standard output will redirect to specific log file 
-  ```
+
 ***
 # note  
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
