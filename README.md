@@ -5,6 +5,12 @@
 ## Function  
 The **MEANGS** is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 ***
+## Download and Install
+<pre>
+git clone https://github.com/YanCCscu/MEANGS.git
+cd MEANGS/tools/
+
+</pre>
 ## Usage  
 MitoDNA extending assembler from `NGS` data  
 <pre>
