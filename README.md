@@ -25,6 +25,7 @@ sudo make && sudo make install
 git clone https://github.com/YanCCscu/MEANGS.git
 cd MEANGS/tools/assembler_v1.0/src
 make
+cp assembler ../../
 </pre>
 
 ## Usage  

@@ -1,0 +1,20 @@
+#The assembler is a SSAKE-like extend assembler written by c++
+The following steps give the install guidence.
+1. update compiler
+    1.1 sudo yum -y install centos-release-scl
+    1.2 sudo yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
+    1.3 source /opt/rh/devtoolset-8/enable
+    1.4 g++ -v (look up gcc version) 
+
+2. install pcre library
+    2.1 download pcre-8.41.tar.gz
+    2.2 tar -xzvf  pcre-8.41.tar.gz
+    2.3 cd pcre-8.41
+    2.4 ./configure --enable-utf8 
+    2.5 sudo make && sudo make install
+
+3. compile source
+    3.1 cd assembler_v1.0/src
+    3.2 make clean
+    3.3 make
+    3.4 mv assembler ../../
