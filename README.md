@@ -75,8 +75,8 @@ optional arguments:
 ## Example
 The example directory contain pair-end NGS data for human SRA acession: SRR039541.3.  
 We keep the first 2000000 reads in each of the pair files after QC.
-The input files can be download:   
-[SRR039541.3 2000000 reads ](https://ndownloader.figshare.com/articles/12199451/versions/2)  
+The [input files](https://ndownloader.figshare.com/articles/12199451/versions/2) are upload to figshare,  
+and can be automatically download with the following commands:
 <pre>
 cd example
 sh run_test.sh
