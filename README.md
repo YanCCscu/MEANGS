@@ -12,12 +12,8 @@ The **MEANGS** is a seed-free software that applies trie-search to extend contig
 <pre>
 	sudo yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
 </pre>
-<<<<<<< HEAD
-* perl pcre >= 8.41
-=======
 * pcre >= 8.41
->>>>>>> 72205e556cc34c3733677c1b5a5d99241333b77e
-	download the pcre from [here](http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.41.tar.gz) and install with the following command:
+download the pcre from [here](http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.41.tar.gz) and install with the following command:
 <pre>
 tar -xzvf  pcre-8.41.tar.gz
 cd pcre-8.41
