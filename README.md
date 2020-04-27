@@ -71,17 +71,21 @@ optional arguments:
                         will redirect to specific log file
 </pre>
 ***
-## Note  
-The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
-***
 ## Example
 	The example directory contain pair-end NGS data for human SRA acession: SRR039541.3.  
-	We keep the first 2000000 reads in each of the pair files after QC.  
+	We keep the first 2000000 reads in each of the pair files after QC.
+	The input files can be download:   
+	. [SRR039541.3 2000000 reads ](https://ndownloader.figshare.com/articles/12199451/versions/2)  
 <pre>
 cd example
-../meangs.py -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin
+sh run_test.sh
 </pre>
+the scripts will download the inputs files(about 340M) and run the following test scripts:
+../meangs.py -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin
 ## Output
 	All output files were stored in one directory assigned by the -o option.  
 	The ${prefix}_deep_detected_mito.fas is the finally assembled mitochondrial genome, 
 	Genes in mitochondrail genome is annotated automatically and stored in the file HumanMito_hmmout_tbl_sorted.gff.
+***
+## Note  
+The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
