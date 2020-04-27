@@ -13,7 +13,8 @@ parser.add_argument("-t", "--hmmtbl", help="input file of hmm table", type=str, 
 parser.add_argument("-o","--outfile", help="out file of selected sequences", type=str,action = "store", \
         default = "mito_selected.gff")
 args = parser.parse_args()
-all_components=["CYTB","ND6","ND4","ND4L","ND3","COX3","ATP6","ATP8","COX2","COX1","ND5","ND2","ND1"]
+#all_components=["CYTB","ND6","ND4","ND4L","ND3","COX3","ATP6","ATP8","COX2","COX1","ND5","ND2","ND1"]
+all_components=[]
 alldict={}
 def complete_score(genedict):
 	return (genedict["gend"]-genedict["gstart"]+1)
@@ -24,6 +25,7 @@ with open (args.hmmtbl,'r') as hmmtbl:
 		hmmlist=hmmline.strip().split()
 		(scaf,gene,gene_start,gene_end,match_start,match_end,seq_len,strand,evalue,score)=\
 		(hmmlist[i] for i in (0,2,4,5,8,9,10,11,12,13))
+		all_components.append(gene)
 		if not gene in alldict.setdefault(scaf,{}).setdefault("gene",{}):
 			alldict.setdefault(scaf,{}).setdefault("gene",{})[gene]=\
 			{"gstart":int(gene_start),\
@@ -37,7 +39,7 @@ with open (args.hmmtbl,'r') as hmmtbl:
 			alldict[scaf]["gene_num"]=alldict[scaf].setdefault("gene_num",0)+1
 			alldict[scaf]["len_complete"]=alldict[scaf].setdefault("len_complete",0)+\
 				complete_score(alldict.setdefault(scaf,{}).setdefault("gene",{})[gene])
-			alldict[scaf]["selected_index"]=alldict[scaf]["gene_num"]/13*alldict[scaf]["len_complete"]
+			alldict[scaf]["selected_index"]=alldict[scaf]["gene_num"]/alldict[scaf]["len_complete"]
 
 outfile=open(args.outfile,"w")
 for scaf in sorted(alldict.items(), key=lambda x:x[1]["selected_index"], reverse=True):

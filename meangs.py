@@ -19,8 +19,10 @@ parser.add_argument("-n","--nsample", help="Number of reads sampled from input r
 parser.add_argument("-s","--seqscaf", help="specific a sequences files(fasta) just for annotation", type=str, action = "store")
 parser.add_argument("--species_class", help="taxon of species belong to", action = "store", \
 	choices = ("A-worms","Arthropoda","Bryozoa","Chordata","Echinodermata",\
-	"Mollusca","Nematoda","N-worms","Porifera-sponges","user-hmm"), default = "Chordata")
-parser.add_argument("--deepin", help="run deeper mode to assembly mitogenome", action = "store_true")
+	"Mollusca","Nematoda","N-worms","Porifera-sponges"), default = "Chordata")
+parser.add_argument("--usr_hmm", help="self-made hmm file of specific genomic regions, will suppress the --species_class option", \
+	type=str,action = "store",default = None)
+parser.add_argument("--deepin", help="run deeper mode to assembly mitogenome/nuclear genes", action = "store_true")
 parser.add_argument("--keepIntMed", help="keep the intermediate files", action = "store_true",default=False)
 #threshold value for rounding to 0 or 1 (only for very specific applicatons)
 parser.add_argument("--keepMinLen", help="Threshold of reads length to keep after remove low quality bases", type=int,action='store',default=30)
@@ -39,9 +41,14 @@ tools_dir=program_dir+'/tools'
 seqtk=tools_dir+'/seqtk'
 assembler=tools_dir+'/assembler'
 nhmmer=tools_dir+'/nhmmer'
-nhmmer_dir=tools_dir+'/CDS_HMM'
-species_class=args.species_class
-nhmmer_profiler=nhmmer_dir+'/%s_CDS.hmm'%species_class 
+if args.usr_hmm:
+	if os.path.exists(args.usr_hmm):
+		nhmmer_profiler=args.usr_hmm
+	else:
+		sys.exit("The file %s is not exists, please offer a useful hmm file"%nhmmer_profiler)
+else:
+	species_class=args.species_class
+	nhmmer_profiler=tools_dir+'/CDS_HMM'+'/%s_CDS.hmm'%species_class 
 #----------------------------------------------
 #convert fastq to fasta after QC
 def runcmd(command):
@@ -55,7 +62,8 @@ def runcmd(command):
 
 def QC_Convert(fq,seqtk,outBase,nsample=0):
 	#fq=os.path.basename(fq)
-	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq'), "The input file for QC should be fq, fq.gz or fastq.gz\n"
+	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq'), \
+		"The input file for QC should be fq, fastq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
 		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
@@ -108,9 +116,9 @@ def FindMitoScaf(fa,tools_dir,outBase):
 	command="python %s/%s -t %s -o %s"%(tools_dir,'hmmoutbl_parse.py',outBase,outBase+"_sorted.gff")
 	runcmd(command)
 	outBase=outBase+"_sorted.gff"
-	command="python %s/%s %s %s > %s"%(tools_dir,'get_selected_fasta.py',outBase,fa,"%s_detected_mito.fas"%origin_outBase)
+	command="python %s/%s %s %s > %s"%(tools_dir,'get_selected_fasta.py',outBase,fa,"%s_detected_aim.fas"%origin_outBase)
 	runcmd(command)
-	return("%s_detected_mito.fas"%origin_outBase)
+	return("%s_detected_aim.fas"%origin_outBase)
 
 #main processes
 if __name__=="__main__":
@@ -133,7 +141,7 @@ if __name__=="__main__":
 	if args.skipassem and args.seqscaf and args.outBase:
 		current_time = time.strftime("%Y-%m-%d %H:%M:%S",
                                              time.localtime(time.time()))
-		print("%s Just start the annotation process for given mito scaffold"%current_time)
+		print("%s Just start the annotation process for given scaffold"%current_time)
 		outBase=os.path.sep.join([aim_dir,args.outBase])
 		FindMitoScaf(args.seqscaf,tools_dir,outBase)
 		sys.exit('%s job finished'%current_time)
