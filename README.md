@@ -7,12 +7,12 @@ The **MEANGS** is a seed-free software that applies trie-search to extend contig
 ***
 ## Download and Install
 ### Requirement
-*gcc version >= 8.3.1
+* gcc version >= 8.3.1
 	you can simply install a altnative version of gcc with the following command:
 <pre>
 	sudo yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
 </pre>
-*perl pcre >= 8.41
+* pcre >= 8.41
 	download the pcre from [here](http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.41.tar.gz) and install with the following command:
 <pre>
 tar -xzvf  pcre-8.41.tar.gz
