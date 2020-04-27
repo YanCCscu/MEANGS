@@ -6,11 +6,27 @@
 The **MEANGS** is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 ***
 ## Download and Install
+### Requirement
+*gcc version >= 8.3.1
+	you can simply install a altnative version of gcc with the following command:
+<pre>
+	sudo yum -y install devtoolset-8-gcc devtoolset-8-gcc-c++ devtoolset-8-binutils
+</pre>
+*perl pcre >= 8.41
+	download the pcre from [here](http://ftp.cs.stanford.edu/pub/exim/pcre/pcre-8.41.tar.gz) and install with the following command:
+<pre>
+tar -xzvf  pcre-8.41.tar.gz
+cd pcre-8.41
+./configure --enable-utf8
+sudo make && sudo make install
+</pre>
+### Install MEANGS
 <pre>
 git clone https://github.com/YanCCscu/MEANGS.git
-cd MEANGS/tools/
-
+cd MEANGS/tools/assembler_v1.0/src
+make
 </pre>
+
 ## Usage  
 MitoDNA extending assembler from `NGS` data  
 <pre>
@@ -59,5 +75,5 @@ optional arguments:
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
 ***
 ## Example
-	meangs.py -1 f_1.fq.gz -2 f_2.fq.gz -o outprefix -t 16 -n 10000 -i 300 --deepin --keepIntMed  
+	meangs.py -1 example/f_1.fq.gz -2 example/f_2.fq.gz -o humanmito -t 16 -n 10000 -i 300 --deepin   
 
