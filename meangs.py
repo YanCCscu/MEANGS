@@ -55,13 +55,14 @@ def runcmd(command):
 
 def QC_Convert(fq,seqtk,outBase,nsample=0):
 	#fq=os.path.basename(fq)
-	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz'), "The input file for QC should be fq.gz or fastq.gz\n"
+	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq'), "The input file for QC should be fq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
-		command="%s trimfq -q 0.01 -l 30 %s| %s seq -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
+		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
 	else:
-		command="zcat %s|head -%d|%s trimfq -q 0.01 -l 30 -|%s seq -A -Q 33 -q 20 -L 30 - >%s"%\
-		(fq,nsample*4,seqtk,seqtk,outfa)
+		command="%s trimfq -q 0.01 -l 30 %s|%s seq -N -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
+		(seqtk,fq,seqtk,nsample*4,outfa)
+		print("... use the first %d reads in %s for assembler ..."%(nsample,fq))
 	runcmd(command)
 
 def Run_nhmmer(fa,nhmmer,nhmmer_profiler,outBase):

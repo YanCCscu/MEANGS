@@ -30,17 +30,14 @@ def parse_fas(fasfile): #parse fasta and return a dict
                         #sys.stderr.write('Finished parsing %s\n'%fasfile)
                 yield title,sequence
 
-selected_titles=[]
+selected_titles={}
 cds=[]
 with open(sys.argv[1],'r') as gffinfo:
 	for gff in gffinfo:
 		gffl=gff.strip().split()
-		selected_titles.append(gffl[0])
-		cds.append("..".join(gffl[1:4]))
+		selected_titles.setdefault(gffl[0],[]).append(gffl[1]+"("+"..".join(gffl[2:4])+")")
 
-selected_titles=set(selected_titles)
-cds="_".join(cds)
 for title,seq  in parse_fas(sys.argv[2]):
-	if title in selected_titles:
-		print (">%s\t%s\n%s"%(title,cds,seq))
+	if title in selected_titles.keys():
+		print (">%s\t%s\n%s"%(title,"/".join(selected_titles[title]),seq))
 #		seq.upper()[::-1]).translate(base_compl_tab))
