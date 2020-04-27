@@ -19,7 +19,7 @@ parser.add_argument("-n","--nsample", help="Number of reads sampled from input r
 parser.add_argument("-s","--seqscaf", help="specific a sequences files(fasta) just for annotation", type=str, action = "store")
 parser.add_argument("--species_class", help="taxon of species belong to", action = "store", \
 	choices = ("A-worms","Arthropoda","Bryozoa","Chordata","Echinodermata",\
-	"Mollusca","Nematoda","N-worms","Porifera-sponges"), default = "Chordata")
+	"Mollusca","Nematoda","N-worms","Porifera-sponges","user-hmm"), default = "Chordata")
 parser.add_argument("--deepin", help="run deeper mode to assembly mitogenome", action = "store_true")
 parser.add_argument("--keepIntMed", help="keep the intermediate files", action = "store_true",default=False)
 #threshold value for rounding to 0 or 1 (only for very specific applicatons)
