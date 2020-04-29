@@ -1,7 +1,11 @@
 #!/usr/bin/env  python
-#get specific sequences by title
-#USAGE:python sys.argv[0] title.info.file sequences.file
+from __future__ import print_function
 import sys,re
+#get specific sequences by title
+USAGE=">>>usage: python %s title.info.gff sequences.fas"%sys.argv[0]
+if len(sys.argv)<2:
+	print(USAGE)
+	sys.exit(0)
 #from string import maketrans
 #base_compl_tab = maketrans("ATGC","TACG")
 def parse_fas(fasfile): #parse fasta and return a dict
