@@ -66,9 +66,9 @@ def QC_Convert(fq,seqtk,outBase,nsample=0):
 		"The input file for QC should be fq, fastq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
-		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
+		command="%s trimfq -q 0.01 -l 30 %s| %s seq -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
 	else:
-		command="%s trimfq -q 0.01 -l 30 %s|%s seq -N -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
+		command="%s trimfq -q 0.01 -l 30 %s|%s seq -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
 		(seqtk,fq,seqtk,nsample*4,outfa)
 		print("... use the first %d reads in %s for assembler ..."%(nsample,fq))
 	runcmd(command)
