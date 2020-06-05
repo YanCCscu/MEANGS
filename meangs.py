@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import sys,os,time
+from multiprocessing import Process  
 import subprocess
 import argparse
 #--------------------------------------------------
@@ -55,7 +56,8 @@ def runcmd(command):
 
 def QC_Convert(fq,seqtk,outBase,nsample=0):
 	#fq=os.path.basename(fq)
-	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq'), "The input file for QC should be fq, fq.gz or fastq.gz\n"
+	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq'), \
+	"The input file for QC should be fq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
 		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
@@ -147,13 +149,22 @@ if __name__=="__main__":
 		args.outBase=os.path.sep.join([aim_dir,args.outBase])
 		for sfq1,sfq2 in zip(fq1s,fq2s):
 			if not args.skipqc:
-				QC_Convert(sfq1,seqtk,args.outBase+"_1",args.nsample) #will output the file args.outBase+"_1"+".input.fas"
-				QC_Convert(sfq2,seqtk,args.outBase+"_2",args.nsample)
+				proc1 = Process(target=QC_Convert, args=(sfq1,seqtk,args.outBase+"_1",args.nsample))
+				proc2 = Process(target=QC_Convert, args=(sfq2,seqtk,args.outBase+"_2",args.nsample))
+				proc1.start()
+				proc2.start()
+				proc1.join()
+				proc2.join()
+				print("End QC converti...")
 			fa1=args.outBase+"_1"+".input.fas"
 			fa2=args.outBase+"_2"+".input.fas"
 			if not args.skiphmm:
-				Run_nhmmer(fa1,nhmmer,nhmmer_profiler,args.outBase+"_1")
-				Run_nhmmer(fa2,nhmmer,nhmmer_profiler,args.outBase+"_2")
+				proc1 = Process(target=Run_nhmmer,args=(fa1,nhmmer,nhmmer_profiler,args.outBase+"_1"))
+				proc2 = Process(target=Run_nhmmer,args=(fa2,nhmmer,nhmmer_profiler,args.outBase+"_2"))
+				proc1.start()
+				proc2.start()
+				proc1.join()
+				proc2.join()
 				mitoReads_withdraw(args.outBase,seqtk,args.outBase+"_1"+"_hmmout_tbl",\
 				args.outBase+"_2"+"_hmmout_tbl",fa1=fa1,fa2=fa2)
 		hmm_fa1=args.outBase+"_matched"+"_"+os.path.basename(fa1)
