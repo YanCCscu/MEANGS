@@ -88,11 +88,11 @@ def mitoReads_withdraw(outBase,seqtk,*hmmout_tbl,**fa): #this will output fasta 
 		command="%s subseq %s %s >%s"%(seqtk,fa[k],hmmreadnames,outBase+"_matched"+"_"+os.path.basename(fa[k]))
 		runcmd(command)
 
-def runASSEMBLY(assembler,read1fa,read2fa,insertlength,outBase,SeedSeq='',deepin=False):
+def runASSEMBLY(assembler,read1fa,read2fa,insertlength,outBase,ncpu,SeedSeq='',deepin=False):
 	aimdir=os.path.dirname(outBase)
 	ReadsIsolate=os.path.dirname(assembler)+"/ReadsIsolation.py"
-	command="%s -1 %s -2 %s -p %s/paired.fa -u %s/unpaired.fa -i %s"%\
-				(ReadsIsolate,read1fa,read2fa,aimdir,aimdir,insertlength)
+	command="%s -1 %s -2 %s -p %s/paired.fa -u %s/unpaired.fa -i %s -n %d"%\
+				(ReadsIsolate,read1fa,read2fa,aimdir,aimdir,insertlength,ncpu)
 	runcmd(command)
 	
 	if not deepin:
@@ -155,7 +155,7 @@ if __name__=="__main__":
 				proc2.start()
 				proc1.join()
 				proc2.join()
-				print("End QC converti...")
+				print("End up QC convertion...")
 			fa1=args.outBase+"_1"+".input.fas"
 			fa2=args.outBase+"_2"+".input.fas"
 			if not args.skiphmm:
@@ -169,13 +169,19 @@ if __name__=="__main__":
 				args.outBase+"_2"+"_hmmout_tbl",fa1=fa1,fa2=fa2)
 		hmm_fa1=args.outBase+"_matched"+"_"+os.path.basename(fa1)
 		hmm_fa2=args.outBase+"_matched"+"_"+os.path.basename(fa2)
-		runASSEMBLY(assembler,hmm_fa1,hmm_fa2,args.insert,args.outBase,deepin=False)
+		hmm_fasize=max(os.path.getsize(hmm_fa1),os.path.getsize(hmm_fa2))
+		mincutfileNO=(hmm_fasize/(2*(1024**3)))
+		run_ncpu=int(mincutfileNO)+1 if mincutfileNO>8 else 8
+		runASSEMBLY(assembler,hmm_fa1,hmm_fa2,args.insert,args.outBase,run_ncpu,deepin=False)
 		seq_scaf=args.outBase+"_scaffolds.fa"
 		simple_final_file=FindMitoScaf(seq_scaf,tools_dir,args.outBase)
 		if args.deepin:
 			mitoSeeds=simple_final_file
 			if not args.skipextend:
-				runASSEMBLY(assembler,fa1,fa2,args.insert,args.outBase+"_deep",SeedSeq=mitoSeeds,deepin=True)
+				fasize=max(os.path.getsize(fa1),os.path.getsize(fa2))
+				mincutfileNO=(fasize/(2*(1024**3)))
+				run_ncpu=int(mincutfileNO)+1 if mincutfileNO>8 else 8
+				runASSEMBLY(assembler,fa1,fa2,args.insert,args.outBase+"_deep",run_ncpu,SeedSeq=mitoSeeds,deepin=True)
 			seq_scaf=args.outBase+"_deep"+"_scaffolds.fa"
 			FindMitoScaf(seq_scaf,tools_dir,args.outBase+"_deep")
 		if not args.keepIntMed and os.path.exists(seq_scaf):
