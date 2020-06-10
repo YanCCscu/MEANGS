@@ -81,7 +81,7 @@ and can be automatically download with the following commands:
 cd example
 sh run_test.sh
 </pre>
-the scripts will download the inputs files(about 340M) and run the following test scripts,typically, the program will complete within 10 minutes:  
+the scripts will download the inputs files(about 340M) and run the following test scripts. typically, the running will finish in 10 minutes:  
 *../meangs.py -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin*
 
 ## Output
