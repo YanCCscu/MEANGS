@@ -20,8 +20,8 @@ cd pcre-8.41
 ./configure --enable-utf8
 sudo make && sudo make install
 </pre>
-You can install the pcre locally if you do not have a root permissions by add the --prefix option,  
-and enable static compilation by add --enable-static     
+You can install the pcre in a own path if you do not have a root permissions by add the --prefix option,  
+and enable static compilation by add --enable-static  
 <pre>
 ./configure --enable-utf8 --enable-static --prefix /path/to/pcre
 </pre>
