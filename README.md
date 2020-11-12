@@ -98,6 +98,6 @@ Genes in mitochondrail genome is annotated automatically and stored in the file 
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
 we also offer a docker image [here](https://hub.docker.com/r/bioinfodocker/meangs) and you can run the example as following:  
 <pre>
-docker run -it --rm --privileged -w /home/meangs -v $PWD:/home/meangs bioinfodocker/meangs:latest meangs.py 
+docker run -it --rm -w /home/meangs -v $PWD:/home/meangs bioinfodocker/meangs:latest meangs.py 
 -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin
 </pre>
