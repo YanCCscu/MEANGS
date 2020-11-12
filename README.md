@@ -20,11 +20,10 @@ cd pcre-8.41
 ./configure --enable-utf8
 sudo make && sudo make install
 </pre>
-you can install the pcre locally if you do not have a root permissions by add the --prefix option  
-through enable static compilation by add --enable-static we pre-complile a static assembler as following:  
+You can install the pcre locally if you do not have a root permissions by add the --prefix option,  
+and enable static compilation by add --enable-static     
 <pre>
 ./configure --enable-utf8 --enable-static --prefix /path/to/pcre
-g++ assembler.cpp pcre++.cpp -o assemblers -I/usr/local/include -L/usr/local/lib -L/path/to/pcre/lib -lpcre -static
 </pre>
 ### Install MEANGS
 <pre>
