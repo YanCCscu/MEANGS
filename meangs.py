@@ -5,11 +5,19 @@ from multiprocessing import Process
 import subprocess
 import argparse
 #--------------------------------------------------
+VERSION="1.0"
+DESCRIPTION='''
+MEANGS: MitoDNA extending assembler from NGS data
+version: V.%s
+''' %VERSION
 ### parse arguments
-parser = argparse.ArgumentParser(\
-description="Example: \
-python meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350",\
-formatter_class=argparse.RawDescriptionHelpFormatter)
+parser = argparse.ArgumentParser(formatter_class=argparse.RawDescriptionHelpFormatter,\
+epilog="""Example:
+#run meangs in a quick mode with paird-end library of insert size 350bp, 16 threads are called.
+	meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
+#run meangs in a 'deepin mode' the first 2000000 reads in both input fastq files will be used the construct mito-genome
+	meangs.py -1 R1.fastq.gz -2 R2.fastq.gz -o A3 -t 16 -n 2000000 -i 300 --deepin
+""")
 parser.add_argument("-1", "--fq1", help="Input paired end _1.fq[.gz] files,seprated by ','", action = "store")
 parser.add_argument("-2", "--fq2", help="Input paired end _2.fq[.gz] files,seprated by ','", action = "store")
 parser.add_argument("-o", "--outBase", help="Output prefix of dir and files", action = "store")
@@ -22,6 +30,7 @@ parser.add_argument("--species_class", help="taxon of species belong to", action
 	choices = ("A-worms","Arthropoda","Bryozoa","Chordata","Echinodermata",\
 	"Mollusca","Nematoda","N-worms","Porifera-sponges"), default = "Chordata")
 parser.add_argument("--deepin", help="run deeper mode to assembly mitogenome", action = "store_true")
+parser.add_argument("--clip", help="detect circle clip point for mitogenome", action = "store_true")
 parser.add_argument("--keepIntMed", help="keep the intermediate files", action = "store_true",default=False)
 #threshold value for rounding to 0 or 1 (only for very specific applicatons)
 parser.add_argument("--keepMinLen", help="Threshold of reads length to keep after remove low quality bases", type=int,action='store',default=30)
@@ -33,6 +42,11 @@ parser.add_argument("--silence", help="run the program in silence mode, \
 	the standard output will redirect to specific log file",action='store_true',default=False)
 args = parser.parse_args()
 
+if len(sys.argv) < 2:   #display the usage
+    print ("%s" %DESCRIPTION)
+    parser.print_usage()
+    sys.exit(1)
+#-------------------------------------------------------------------------
 #env variable setting
 workdir=os.getcwd()
 program_dir=os.path.dirname(os.path.abspath(sys.argv[0]))
@@ -63,7 +77,7 @@ def QC_Convert(fq,seqtk,outBase,nsample=0):
 		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
 	else:
 		command="%s trimfq -q 0.01 -l 30 %s|%s seq -N -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
-		(seqtk,fq,seqtk,nsample*4,outfa)
+		(seqtk,fq,seqtk,nsample*2,outfa)
 		print("... use the first %d reads in %s for assembler ..."%(nsample,fq))
 	runcmd(command)
 
@@ -187,5 +201,9 @@ if __name__=="__main__":
 		if not args.keepIntMed and os.path.exists(seq_scaf):
 			for nrfile in (fa1,fa2,hmm_fa1,hmm_fa2):
 				os.remove(nrfile)
+		if args.clip:
+			inputfile=args.outBase+"_deep"+"_detected_mito.fas"
+			command="python %s/%s -f %s -k %s -l %d -d %d"%(tools_dir,'detercirc.py',inputfile,31,16000,6000)
+        		runcmd(command)
 	#logfile.close()
 	#sys.stdout=savedStdout
