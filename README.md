@@ -39,11 +39,9 @@ MitoDNA extending assembler from `NGS` data
 usage: meangs.py [-h] [-1 FQ1] [-2 FQ2] [-o OUTBASE] [-t THREADS] [-i INSERT]
                  [-q QUALITY] [-n NSAMPLE] [-s SEQSCAF]
                  [--species_class {A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}]
-                 [--deepin] [--keepIntMed] [--keepMinLen KEEPMINLEN]
+                 [--deepin] [--clip] [--keepIntMed] [--keepMinLen KEEPMINLEN]
                  [--skipassem] [--skipqc] [--skiphmm] [--skipextend]
                  [--silence]
-
-Example: python meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -65,6 +63,7 @@ optional arguments:
   --species_class {A-worms,Arthropoda,Bryozoa,Chordata,Echinodermata,Mollusca,Nematoda,N-worms,Porifera-sponges}
                         taxon of species belong to
   --deepin              run deeper mode to assembly mitogenome
+  --clip                detect circle clip point for mitogenome
   --keepIntMed          keep the intermediate files
   --keepMinLen KEEPMINLEN
                         Threshold of reads length to keep after remove low
@@ -75,6 +74,12 @@ optional arguments:
   --skipextend          skip the process of extend in deepin mode
   --silence             run the program in silence mode, the standard output
                         will redirect to specific log file
+
+Example:
+#run meangs in a quick mode with paird-end library of insert size 350bp, 16 threads are called.
+	meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
+#run meangs in a 'deepin mode' the first 2000000 reads in both input fastq files will be used the construct mito-genome
+	meangs.py -1 R1.fastq.gz -2 R2.fastq.gz -o A3 -t 16 -n 2000000 -i 300 --deepin
 </pre>
 ***
 ## Example
