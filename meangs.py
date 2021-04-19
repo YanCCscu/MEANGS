@@ -26,7 +26,7 @@ parser.add_argument("-i", "--insert", help="library insert length", type=int, ac
 parser.add_argument("-q","--quality", help="Threshold value for low base quality", type=float, action = "store", default = 0.05)
 parser.add_argument("-n","--nsample", help="Number of reads sampled from input reads, default 0 (keep all reads)", type=int, action = "store", default = 0)
 parser.add_argument("-s","--seqscaf", help="specific a sequences files(fasta) just for annotation", type=str, action = "store")
-parser.add_argument("--species_class", help="taxon of species belong to", action = "store", \
+parser.add_argument("--species_class", help="taxon of species belong to,default is Chordata", action = "store", \
 	choices = ("A-worms","Arthropoda","Bryozoa","Chordata","Echinodermata",\
 	"Mollusca","Nematoda","N-worms","Porifera-sponges"), default = "Chordata")
 parser.add_argument("--deepin", help="run deeper mode to assembly mitogenome", action = "store_true")
@@ -204,6 +204,6 @@ if __name__=="__main__":
 		if args.clip:
 			inputfile=args.outBase+"_deep"+"_detected_mito.fas"
 			command="python %s/%s -f %s -k %s -l %d -d %d"%(tools_dir,'detercirc.py',inputfile,31,16000,6000)
-        		runcmd(command)
+			runcmd(command)
 	#logfile.close()
 	#sys.stdout=savedStdout
