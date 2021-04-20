@@ -60,7 +60,7 @@ def Reader_run(manypara):
 	while (start_pos <= end_pos):
 		if not line:
 			break
-		title=line.strip().split()[0]
+		title=line.strip().split()[0].split("|")[0].split("/")[0]
 		line=fd.readline()
 		sequence=""
 		while True:
