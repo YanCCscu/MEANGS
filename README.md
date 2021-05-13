@@ -105,4 +105,5 @@ The ${prefix}_deep_detected_mito.fas is the finally assembled mitochondrial geno
 Genes in mitochondrail genome is annotated automatically and stored in the file ${prefix}_hmmout_tbl_sorted.gff.
 
 ## Note  
-The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage  
+The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage.
+more Test results can be found [here](https://ndownloader.figshare.com/files/27988548).
