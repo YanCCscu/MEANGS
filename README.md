@@ -106,4 +106,4 @@ Genes in mitochondrail genome is annotated automatically and stored in the file 
 
 ## Note  
 The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage.
-more Test results can be found [here](https://ndownloader.figshare.com/files/27988548).
+Supplementary information and more test results can be found [here](https://ndownloader.figshare.com/files/27988548).
