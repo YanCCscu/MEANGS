@@ -14,6 +14,7 @@ parser.add_argument("-o","--outfile", help="out file of selected sequences", typ
         default = "mito_selected.gff")
 args = parser.parse_args()
 all_components=["CYTB","ND6","ND4","ND4L","ND3","COX3","ATP6","ATP8","COX2","COX1","ND5","ND2","ND1"]
+Missing=[] #store missing genes
 alldict={}
 def complete_score(genedict):
 	return (genedict["gend"]-genedict["gstart"]+1)
@@ -51,4 +52,6 @@ for scaf in sorted(alldict.items(), key=lambda x:x[1]["selected_index"], reverse
 			try:
 				all_components.remove(gene[0])
 			except:
-				print("gene %s not exists in assembly scaffold"%gene[0])
+				Missing.append(gene[0])
+
+print("gene %s not exists in assembly scaffold"%Missing)
