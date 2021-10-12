@@ -5,7 +5,16 @@
 ## Function  
 The **MEANGS** is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 ***
+## Quick start
+* A compiled software is provided, and you can directly download it and use it with the following command:
+<pre>
+git clone https://github.com/YanCCscu/MEANGS.git
+cd MEANGS
+./meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
+</pre>
+***
 ## Download and Install
+If you use an old version of linux or ubuntu. You may need to download, install and compile MEANGS as described following.
 ### Requirement
 * gcc version >= 8.3.1
 you can simply install a altnative version of gcc with the following command:
@@ -105,5 +114,6 @@ The ${prefix}_deep_detected_mito.fas is the finally assembled mitochondrial geno
 Genes in mitochondrail genome is annotated automatically and stored in the file ${prefix}_hmmout_tbl_sorted.gff.
 
 ## Note  
-The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage.
-Supplementary information and more test results can be found [here](https://figshare.com/articles/online_resource/supplementary_materials_for_MEANGS_TEST/14569509).
+* The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage. It is wise to test different number of "-n" to obtain a completed mitogenome.
+* Supplementary information and more test results can be found [here](https://figshare.com/articles/online_resource/supplementary_materials_for_MEANGS_TEST/14569509).
+* Base on enough reads were given, for highly repetitive regions in a mitogenome, it is easy for MEANGS to assemble it as long as several reads contain the whole repetitive region. And if not, MEANGS always break the contig at here, which can help user to know a structural anomaly here.
