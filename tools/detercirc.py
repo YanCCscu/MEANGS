@@ -3,6 +3,13 @@ from __future__ import print_function
 import sys,warnings
 import argparse
 import re
+RESET = '\033[0m'
+GREEN = '\033[1;32m'
+RED = '\033[0;31;40m'
+BLUE = '\033[1;34m'
+YELLOW = '\033[1;33m'
+LGRAY = '\033[1;37m'
+DGRAY = '\033[1;30m'
 #assign variables
 baseN=re.compile(r'[^ATGC]')
 kmers = []
@@ -10,7 +17,7 @@ seqs = {}
 kmerdict = {}
 
 parser = argparse.ArgumentParser(description="Determined circules", prog='detercirc.py', 
-	formatter_class=argparse.RawDescriptionHelpFormatter)
+    formatter_class=argparse.RawDescriptionHelpFormatter)
 
 parser.add_argument("-f", "--fasta", help="fasta file containing the sequence to be evaluate.", action="store")
 parser.add_argument("-k", "--kmer", help="kmer size. single number (default = 31) or range (e.g. 31-35).", type=str, default='31', action="store")
@@ -26,13 +33,13 @@ firstseq=''
 for l in fa:
     if l.startswith('>'):
         current = l.strip().replace('>','')
-	if not firstseq:
-		firstseq=current
+    if not firstseq:
+        firstseq=current
         seqs[current] = ''
     else:
         seqs[current]+=l.strip().upper()
 
-print ("\nThe '%s' contains %i sequences. will use the first with  %s in length!\n" %(args.fasta, len(seqs),len(seqs[firstseq])))
+print ("\n%sThe '%s' contains %i sequences. will use the longest one in %sbp!\n%s" %(LGRAY,args.fasta, len(seqs),len(seqs[firstseq]),RESET))
 seqs=seqs[firstseq]
 
 
@@ -52,12 +59,13 @@ for k in range(kmers[0],kmers[1],kmers[2]):
         match=baseN.finditer(kmer)
         ml=[m.start() for m in match]
         if ml:
-            skip = ml[-1] #last base of current kmer is ambiguous - jumping ahead by k bases
+            skip = ml[-1] #last base of current kmer contain ambiguous base, jumping ahead by k bases
             i+=(skip+1)
         else:
             kmerdict.setdefault(kmer,[]).append(i)
             i+=1
     print ("Finished collect %s-mers .." %k,)
+#print(kmerdict)
 
 #count kmers
 i=0
@@ -80,19 +88,22 @@ for ll in clips:
         clips_select[ll]=clips[ll]
 
 if len(clips_select) < 1:
-	print("The assembled results maybe complte,\n\tdid not find a candicate clip point")
+    print("%sThere is no candicate clip point found, the sequence might be well assembled!!!%s"%(GREEN,RESET))
+    with open(args.out+".fas",'w') as outfas:
+        outfas.write(">%s\t%d-%d\n%s\n"%(args.out,1,len(seqs),seqs))
 elif len(clips_select) == 1:
-	print ("found the only candidate clip in length %d[+-]%d, start extract sequences to %s"\
-		%(args.length,args.deviation,args.out+".fas"))
-	with open(args.out+".fas",'w') as outfas:
-		kv=list(clips_select)[0]
-		clip_start=clips_select[kv][0][0]
-		clip_end=clips_select[kv][0][1]
-		outfas.write('>%s\t%d-%d\n%s\n'%(args.out,clip_start,clip_end,seqs[clip_start:clip_end]))
+    kv=list(clips_select)[0]
+    clip_start=clips_select[kv][0][0]
+    clip_end=clips_select[kv][0][1]
+    print("%sfound the only candidate clip in length %d[+-]%d, start extract sequence range (%s-%s) to %s%s"\
+        %(DGRAY,args.length,args.deviation,clip_start,clip_end,args.out+".fas",RESET))
+    with open(args.out+".fas",'w') as outfas:
+        outfas.write('>%s\t%d-%d\n%s\n'%(args.out,clip_start,clip_end,seqs[clip_start:clip_end]))
 if len(clips_select) > 1:
-    print ("\nThere are %i candidate(s) found in kmer %d, in range %d[+-]%d, \ntry to reduce the range by -l/-d option" %(len(clips_select), k,args.length,args.deviation))
+    print ("\n%sThere are %i candidate(s) found in kmer %d, in range %d[+-]%d, \ntry to reduce the range by -l/-d option%s" \
+           %(len(RED,clips_select), k,args.length,args.deviation,RESET))
     for l in sorted(clips_select):
         print ("\t- clip points %i - %i (length %s; supported by %i duplicted %i-mers);" \
                %(int(clips_select[l][0][0]), int(clips_select[l][0][1]), l, len(clips_select[l])/2, k))
 
-print("All Done!!!")
+print("%sAll Done!!!%s"%(DGRAY,RESET))
