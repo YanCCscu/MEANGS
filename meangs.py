@@ -205,5 +205,8 @@ if __name__=="__main__":
 			inputfile=args.outBase+"_deep"+"_detected_mito.fas"
 			command="python %s/%s -f %s -k %s -l %d -d %d"%(tools_dir,'detercirc.py',inputfile,31,16000,6000)
 			runcmd(command)
+	else:
+		print("\033[91mWarning:Please use pair-end fastq as input\033[0m\n")
+		sys.exit(1)
 	#logfile.close()
 	#sys.stdout=savedStdout
