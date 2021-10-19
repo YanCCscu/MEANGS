@@ -12,6 +12,7 @@ git clone https://github.com/YanCCscu/MEANGS.git
 cd MEANGS
 ./meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
 </pre>
+* For MEANGS (v1.0), only **paired-end data** are available to assemble for a mitogenome.
 ***
 ## Download and Install
 If you use an old version of linux or ubuntu. You may need to download, install and compile MEANGS as described following.
