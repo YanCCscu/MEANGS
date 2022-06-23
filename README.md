@@ -4,6 +4,7 @@
 ***
 ## Function  
 The **MEANGS** is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
+Use **Python3** to run it.
 ***
 ## Quick start
 * A compiled software is provided, and you can directly download it and use it with the following command:
