@@ -97,7 +97,7 @@ Example:
 #run meangs in a 'deepin mode' the first 2000000 reads in both input fastq files will be used the construct mito-genome
 	meangs.py -1 R1.fastq.gz -2 R2.fastq.gz -o A3 -t 16 -n 2000000 -i 300 --deepin
 </pre>
-Here, A-worms stand for Annelida segmented worms; N-worms stand for Nemertea ribbon worms.  
+Here, A-worms stands for Annelida segmented worms, and N-worms stands for Nemertea ribbon worms.  
 ***
 ## Example
 The example directory contain pair-end NGS data for human SRA acession: SRR039541.3.  
