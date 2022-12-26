@@ -190,7 +190,9 @@ if __name__=="__main__":
 		seq_scaf=args.outBase+"_scaffolds.fa"
 		simple_final_file=FindMitoScaf(seq_scaf,tools_dir,args.outBase)
 		if args.deepin:
-			mitoSeeds=simple_final_file
+			mitoSeeds='scaffold_seeds.fas'
+			command="python %s/%s %s >%s"%(tools_dir,'scaffold2seed.py',simple_final_file,mitoSeeds)
+			runcmd(command)
 			if not args.skipextend:
 				fasize=max(os.path.getsize(fa1),os.path.getsize(fa2))
 				mincutfileNO=(fasize/(2*(1024**3)))
