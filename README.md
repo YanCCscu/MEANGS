@@ -16,7 +16,7 @@ cd MEANGS
 * For MEANGS (v1.0), only **paired-end data** are available to assemble for a mitogenome.
 ***
 ## Conda availability
-* Since April 2023, **MEANGS** is avaliable in **Anaconda** and you can install it with the folloing command:
+* Since April 2023, **MEANGS** is available in **Anaconda** and you can install it with the following command:
 <pre>
 conda install -c yccscucib meangs
 </pre>
@@ -36,8 +36,8 @@ cd pcre-8.41
 ./configure --enable-utf8
 sudo make && sudo make install
 </pre>
-You can install the pcre in a own path if you do not have a root permissions by add the --prefix option,  
-and enable static compilation by add --enable-static  
+You can install the pcre in a own path if you do not have a root permission by add the --prefix option,  
+and enable static compilation by adding --enable-static  
 <pre>
 ./configure --enable-utf8 --enable-static --prefix /path/to/pcre
 </pre>
@@ -97,7 +97,7 @@ optional arguments:
                         will redirect to specific log file
 
 Example:
-#run meangs in a quick mode with paird-end library of insert size 350bp, 16 threads are called.
+#run meangs in a quick mode with paired-end library of insert size 350bp, 16 threads are called.
 	meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
 #run meangs in a 'deepin mode' the first 2000000 reads in both input fastq files will be used the construct mito-genome
 	meangs.py -1 R1.fastq.gz -2 R2.fastq.gz -o A3 -t 16 -n 2000000 -i 300 --deepin
@@ -105,23 +105,24 @@ Example:
 Here, A-worms stands for Annelida segmented worms, and N-worms stands for Nemertea ribbon worms.  
 ***
 ## Example
-The example directory contain pair-end NGS data for human SRA acession: SRR039541.3.  
+The example directory contains pair-end NGS data for human SRA accession: SRR039541.3.  
 We keep the first 2000000 reads in each of the pair files after QC.
-The [input files](https://ndownloader.figshare.com/articles/12199451/versions/2) are upload to figshare,  
-and can be automatically download with the following commands:
+The [input files](https://ndownloader.figshare.com/articles/12199451/versions/2) are uploaded to figshare,  
+and can be automatically downloaded with the following commands:
 <pre>
 cd example
 sh run_test.sh
 </pre>
-the scripts will download the inputs files(about 340M) and run the following test scripts. typically, the running will finish in 10 minutes:  
+the scripts will download the input files(about 340M) and run the following test scripts. typically, the running will finish in 10 minutes:  
 *../meangs.py -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin*
 
 ## Output
 All output files were stored in one directory assigned by the -o option.  
-The ${prefix}_deep_detected_mito.fas is the finally assembled mitochondrial genome, 
-Genes in mitochondrail genome is annotated automatically and stored in the file ${prefix}_hmmout_tbl_sorted.gff.
+The {prefix}_deep_detected_mito.fas is the finally assembled mitochondrial genome. 
+The mito_cliped.fas will be in the previous level folder if "--clip" works.
+Genes in the mitochondrial genome are annotated automatically and stored in the file {prefix}_hmmout_tbl_sorted.gff.
 
 ## Note  
-* The augrument -n (nsample) is strongly recommended to reduce runtime and memory usage. It is wise to test different number of "-n" to obtain a completed mitogenome.
+* The argument -n (nsample) is strongly recommended to reduce runtime and memory usage. It is wise to test different numbers of "-n" to obtain a completed mitogenome.
 * Supplementary information and more test results can be found [here](https://figshare.com/articles/online_resource/supplementary_materials_for_MEANGS_TEST/14569509).
-* Base on enough reads were given, for highly repetitive regions in a mitogenome, it is easy for MEANGS to assemble it as long as several reads contain the whole repetitive region. And if not, MEANGS always break the contig at here, which can help user to know a structural anomaly here.
+* Based on enough reads given, for highly repetitive regions in a mitogenome, it is easy for MEANGS to assemble it as long as several reads contain the whole repetitive region. If not, MEANGS always break the contig at here, which can help the user to know a structural anomaly.
