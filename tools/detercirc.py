@@ -101,7 +101,7 @@ elif len(clips_select) == 1:
         outfas.write('>%s\t%d-%d\n%s\n'%(args.out,clip_start,clip_end,seqs[clip_start:clip_end]))
 if len(clips_select) > 1:
     print ("\n%sThere are %i candidate(s) found in kmer %d, in range %d[+-]%d, \ntry to reduce the range by -l/-d option%s" \
-           %(len(RED,clips_select), k,args.length,args.deviation,RESET))
+           %(RED,len(clips_select), k,args.length,args.deviation,RESET))
     for l in sorted(clips_select):
         print ("\t- clip points %i - %i (length %s; supported by %i duplicted %i-mers);" \
                %(int(clips_select[l][0][0]), int(clips_select[l][0][1]), l, len(clips_select[l])/2, k))
