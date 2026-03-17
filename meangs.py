@@ -70,7 +70,7 @@ def runcmd(command):
 
 def QC_Convert(fq,seqtk,outBase,nsample=0,PQ=0.01):
 	#fq=os.path.basename(fq)
-	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq') or fq.endswith('fas') or fq.endswith('fa'), \
+	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq') or fq.endswith('fas') or fq.endswith('fa') or fq.endswith('fasta'), \
 	"The input file for QC should be fq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
