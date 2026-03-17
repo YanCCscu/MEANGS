@@ -103,13 +103,16 @@ class Partition(object):
 def writePair(pairedout,fc1,fc2,paired_ids,insert):
 	sys.stderr.write('Start writting pairedfile %s ...\n'%pairedout)
 	with open(pairedout,'w') as pairedfile:
-		first_line_marker=True
-		for pid in paired_ids:
-			if first_line_marker:
-				pairedfile.write("%s:%s\n%s:%s"%(pid.replace(":","."),insert,fc1[pid],fc2[pid]))
-				first_line_marker=False
-			else:
-				pairedfile.write("\n%s:%s\n%s:%s"%(pid.replace(":","."),insert,fc1[pid],fc2[pid]))
+		if len(paired_ids):
+			first_line_marker=True
+			for pid in paired_ids:
+				if first_line_marker:
+					pairedfile.write("%s:%s\n%s:%s"%(pid.replace(":","."),insert,fc1[pid],fc2[pid]))
+					first_line_marker=False
+				else:
+					pairedfile.write("\n%s:%s\n%s:%s"%(pid.replace(":","."),insert,fc1[pid],fc2[pid]))
+		else:
+			pairedfile.write(">pairednull:%s"%(insert))
 
 def writeUnpair(unpairedout,fc1,fc2,unpaired_id1,unpaired_id2):				
 	sys.stderr.write('Start writting unpairedfile %s ...\n'%unpairedout)
@@ -143,20 +146,47 @@ if __name__ == "__main__":
 		return(fasdict)
 	
 	thread_num = args.ncpu 
-	dc1=readpool(args.fa1,args.ncpu)
-	dc2=readpool(args.fa2,args.ncpu)
-	print("finish parsing fasta files...")
-	dc1_id=set(dc1.keys())
-	dc2_id=set(dc2.keys())
-	paired_ids = dc1_id & dc2_id
-	unpaired_id1 = dc1_id - paired_ids
-	unpaired_id2 = dc2_id - paired_ids
-	print("there are %d sequences pairs, and %d/%d unpaired in fq1/fq2"%\
-		(len(paired_ids),len(unpaired_id1),len(unpaired_id2)))
-	#write paired and unpaired files
-	pw1=Process(target=writePair,args=(args.pairedout,dc1,dc2,paired_ids,args.insert))
-	pw2=Process(target=writeUnpair,args=(args.unpairedout,dc1,dc2,unpaired_id1,unpaired_id2))
-	pw1.start()
-	pw2.start()
-	pw1.join()
-	pw2.join()
+	if args.fa1 and args.fa2:
+		dc1=readpool(args.fa1,args.ncpu)
+		dc2=readpool(args.fa2,args.ncpu)
+		print("finish parsing fasta files...")
+		dc1_id=set(dc1.keys())
+		dc2_id=set(dc2.keys())
+		paired_ids = dc1_id & dc2_id
+		unpaired_id1 = dc1_id - paired_ids
+		unpaired_id2 = dc2_id - paired_ids
+		print("there are %d sequences pairs, and %d/%d unpaired in fq1/fq2"%\
+			(len(paired_ids),len(unpaired_id1),len(unpaired_id2)))
+		#write paired and unpaired files
+		pw1=Process(target=writePair,args=(args.pairedout,dc1,dc2,paired_ids,args.insert))
+		pw2=Process(target=writeUnpair,args=(args.unpairedout,dc1,dc2,unpaired_id1,unpaired_id2))
+		pw1.start()
+		pw2.start()
+		pw1.join()
+		pw2.join()
+	elif args.fa1 and (not args.fa2):
+		fasize=os.path.getsize(args.fa1)
+		mincutfileNO=(fasize/(2*(1024**3)))
+		run_ncpu=int(mincutfileNO)+1 if mincutfileNO<args.ncpu else args.ncpu
+		print("will use %s CPU to format inputfile"%run_ncpu)
+		dc1=readpool(args.fa1,run_ncpu)
+		print("finish parsing fasta files...")
+		paired_ids=""
+		unpaired_ids=set(dc1.keys())
+		print("there are %d sequences pairs, and %d unpaired in fq1"%\
+			(len(paired_ids),len(unpaired_ids)))
+		#write paired and unpaired files
+		with open(args.pairedout,'w') as pairedfile:
+			pairedfile.write(">pairednull:%s"%(args.insert))
+		with open(args.unpairedout,'w') as unpairedfile:
+			first_line_marker=True
+			for pid in unpaired_ids:
+				if first_line_marker:
+					unpairedfile.write("%s\n%s"%(pid.replace(":","."),dc1[pid]))
+					first_line_marker=False
+				else:
+					unpairedfile.write("\n%s\n%s"%(pid.replace(":","."),dc1[pid]))
+	else:
+		print("No input fasta file provided for reads isolation")
+		sys.exit(1)
+		
