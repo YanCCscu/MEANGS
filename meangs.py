@@ -5,7 +5,7 @@ from multiprocessing import Process
 import subprocess
 import argparse
 #--------------------------------------------------
-VERSION="1.0"
+VERSION="1.3.1"
 DESCRIPTION='''
 MEANGS: MitoDNA extending assembler from NGS data
 version: V.%s
@@ -68,16 +68,16 @@ def runcmd(command):
         except:
                 sys.exit("Error occured when running command:\n%s" % command)
 
-def QC_Convert(fq,seqtk,outBase,nsample=0):
+def QC_Convert(fq,seqtk,outBase,nsample=0,PQ=0.01):
 	#fq=os.path.basename(fq)
-	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq'), \
+	assert fq.endswith('fq.gz') or fq.endswith('fastq.gz') or fq.endswith('fq') or fq.endswith('fastq') or fq.endswith('fas') or fq.endswith('fa'), \
 	"The input file for QC should be fq, fq.gz or fastq.gz\n"
 	outfa=outBase+".input.fas"
 	if nsample == 0:
-		command="%s trimfq -q 0.01 -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,fq,seqtk,outfa)
+		command="%s trimfq -q %s -l 30 %s| %s seq -N -A -Q 33 -q 20 -L 30 - >%s"%(seqtk,PQ,fq,seqtk,outfa)
 	else:
-		command="%s trimfq -q 0.01 -l 30 %s|%s seq -N -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
-		(seqtk,fq,seqtk,nsample*2,outfa)
+		command="%s trimfq -q %s -l 30 %s|%s seq -N -A -Q 33 -q 20 -L 30 -|head -%d >%s"%\
+		(seqtk,PQ,fq,seqtk,nsample*2,outfa)
 		print("... use the first %d reads in %s for assembler ..."%(nsample,fq))
 	runcmd(command)
 
@@ -104,11 +104,17 @@ def mitoReads_withdraw(outBase,seqtk,*hmmout_tbl,**fa): #this will output fasta 
 
 def runASSEMBLY(assembler,read1fa,read2fa,insertlength,outBase,ncpu,SeedSeq='',deepin=False):
 	aimdir=os.path.dirname(outBase)
-	ReadsIsolate=os.path.dirname(assembler)+"/ReadsIsolation.py"
-	command="%s -1 %s -2 %s -p %s/paired.fa -u %s/unpaired.fa -i %s -n %d"%\
-				(ReadsIsolate,read1fa,read2fa,aimdir,aimdir,insertlength,ncpu)
-	runcmd(command)
-	
+	if not read2fa:
+		ReadsIsolate=os.path.dirname(assembler)+"/ReadsIsolation.py"
+		command="%s -1 %s -p %s/paired.fa -u %s/unpaired.fa -i %s -n %d"%\
+					(ReadsIsolate,read1fa,aimdir,aimdir,insertlength,ncpu)
+		runcmd(command)
+	else:
+		ReadsIsolate=os.path.dirname(assembler)+"/ReadsIsolation.py"
+		command="%s -1 %s -2 %s -p %s/paired.fa -u %s/unpaired.fa -i %s -n %d"%\
+					(ReadsIsolate,read1fa,read2fa,aimdir,aimdir,insertlength,ncpu)
+		runcmd(command)
+		
 	if not deepin:
 		command="%s -f %s/paired.fa -p 1 -g %s/unpaired.fa -m 20 -w 5 -b %s"%\
 						(assembler,aimdir,aimdir,outBase)
@@ -207,8 +213,48 @@ if __name__=="__main__":
 			inputfile=args.outBase+"_deep"+"_detected_mito.fas"
 			command="python %s/%s -f %s -k %s -l %d -d %d"%(tools_dir,'detercirc.py',inputfile,31,16000,6000)
 			runcmd(command)
+	elif args.fq1 and (not args.fq2):
+		fq1s=[os.path.abspath(fq) for fq in args.fq1.split(',')] #multiply libs were sperated by ","
+		#outBases=[ob for ob in args.outBase.split(',')]
+		fa1=fa2=hmm_fa2=''
+		args.outBase=os.path.sep.join([aim_dir,args.outBase])
+		for sfq1 in fq1s:
+			if not args.skipqc:
+				QC_Convert(sfq1,seqtk,args.outBase+"_1",args.nsample,PQ=0.01)
+				print("End up QC convertion...")
+			fa1=args.outBase+"_1"+".input.fas"
+			if not args.skiphmm:
+				Run_nhmmer(fa1,nhmmer,nhmmer_profiler,args.outBase+"_1")
+				mitoReads_withdraw(args.outBase,seqtk,args.outBase+"_1"+"_hmmout_tbl",\
+				fa1=fa1)
+		hmm_fa1=args.outBase+"_matched"+"_"+os.path.basename(fa1)
+		hmm_fasize=os.path.getsize(hmm_fa1)
+		mincutfileNO=(hmm_fasize/(2*(1024**3)))
+		run_ncpu=int(mincutfileNO)+1 if mincutfileNO>8 else 8
+		runASSEMBLY(assembler,hmm_fa1,"",args.insert,args.outBase,run_ncpu,deepin=False)
+		seq_scaf=args.outBase+"_scaffolds.fa"
+		simple_final_file=FindMitoScaf(seq_scaf,tools_dir,args.outBase)
+		if args.deepin:
+			mitoSeeds='scaffold_seeds.fas'
+			command="python %s/%s %s >%s"%(tools_dir,'scaffold2seed.py',simple_final_file,mitoSeeds)
+			runcmd(command)
+			if not args.skipextend:
+				fasize=os.path.getsize(fa1)
+				mincutfileNO=(fasize/(2*(1024**3)))
+				run_ncpu=int(mincutfileNO)+1 if mincutfileNO>8 else 8
+				runASSEMBLY(assembler,fa1,"",args.insert,args.outBase+"_deep",run_ncpu,SeedSeq=mitoSeeds,deepin=True)
+			seq_scaf=args.outBase+"_deep"+"_scaffolds.fa"
+			FindMitoScaf(seq_scaf,tools_dir,args.outBase+"_deep")
+		if not args.keepIntMed and os.path.exists(seq_scaf):
+			for nrfile in (fa1,fa2,hmm_fa1,hmm_fa2):
+				if nrfile:
+					os.remove(nrfile)
+		if args.clip:
+			inputfile=args.outBase+"_deep"+"_detected_mito.fas"
+			command="python %s/%s -f %s -k %s -l %d -d %d"%(tools_dir,'detercirc.py',inputfile,31,16000,6000)
+			runcmd(command)
 	else:
-		print("\033[91mWarning:Please use pair-end fastq as input\033[0m\n")
+		print("\033[91mError: input files fastq/fasta not found\033[0m\n")
 		sys.exit(1)
 	#logfile.close()
 	#sys.stdout=savedStdout
