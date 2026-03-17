@@ -13,7 +13,10 @@ git clone https://github.com/YanCCscu/MEANGS.git
 cd MEANGS
 ./meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
 </pre>
-* For MEANGS (v1.0), only **paired-end data** are available to assemble for a mitogenome.
+* For MEANGS (v1.3.1), **paired-end data** and **single-end data** are available to assemble for a mitogenome.
+<pre>
+./meangs.py --silence -1 1.fq.gz -o OutBase -t 16 -i 350
+</pre>
 ***
 ## Conda availability
 * Since April 2023, **MEANGS** is available in **Anaconda** and you can install it with the following command:
@@ -115,6 +118,8 @@ sh run_test.sh
 </pre>
 the scripts will download the input files(about 340M) and run the following test scripts. typically, the running will finish in 10 minutes:  
 *../meangs.py -1 SRR039541.3_1.clean.fq.gz -2 SRR039541.3_2.clean.fq.gz -o HumanMito -t 16 -n 2000000 -i 300 --deepin*
+for single-end NGS data, you can run the same way without -2 option:
+*../meangs.py -1 SRR039541.3_1.clean.fq.gz -o HumanMito -t 16 -n 4000000 -i 300 --deepin*
 
 ## Output
 All output files were stored in one directory assigned by the -o option.  
