@@ -13,7 +13,7 @@ git clone https://github.com/YanCCscu/MEANGS.git
 cd MEANGS
 ./meangs.py --silence -1 1.fq.gz -2 2.fq.gz -o OutBase -t 16 -i 350
 </pre>
-* For MEANGS (v1.3.1), **paired-end data** and **single-end data** are available to assemble for a mitogenome.
+* Since MEANGS (v1.3.1), both **paired-end data** and **single-end data** are available for MEANGS.
 <pre>
 ./meangs.py --silence -1 1.fq.gz -o OutBase -t 16 -i 350
 </pre>
