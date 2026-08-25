@@ -6,6 +6,11 @@
 The **MEANGS** is a seed-free software that applies trie-search to extend contigs from self-discovery seeds and assemble mitogenome, from NGS data. 
 Use **Python3** to run it. 
 ***
+## System Requirements
+* **Operating system:** **Linux (x86_64)** is the only supported platform for the standard installation. The pre-compiled binaries shipped in the `tools` directory (`nhmmer`, `assembler` and `seqtk`) are compiled for Linux only.
+* **MacOS / Darwin is NOT supported.** If on MacOS you encounter an error such as `cannot execute binary file` when running the `nhmmer` binary, it is because these Linux binaries cannot be executed on MacOS. Please run MEANGS on a **Linux** machine, install it through **Conda** (see [Conda availability](#conda-availability)), or use the **Docker** image (see [Download and Install](#download-and-install)).
+* **Python:** **Python 3** is required to run the main script `meangs.py`.
+***
 ## Quick start
 * A compiled software is provided, and you can directly download it and use it with the following command:
 <pre>
